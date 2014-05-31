@@ -1,11 +1,14 @@
-package com.beg;
+package com.org;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+enum mode {DRIVING, WALKING, BICYCLING, TRANSIT}
+
 public class DirectionAPIRequest {
-	private final String basicUrl = "http://maps.googleapis.com/maps/api/directions/"; 
 	
+	private final String basicUrl = "http://maps.googleapis.com/maps/api/directions/";
+
 	private String contentType;
 	private String destination;
 	private boolean sensor;
@@ -18,30 +21,37 @@ public class DirectionAPIRequest {
 	private String departure_time;
 	private String arrival_time;
 	private String origin;
-	
-	public DirectionAPIRequest(String contentType, String origin, String destination, boolean sensor){
-		try {
-			this.contentType = URLEncoder.encode(contentType, "utf-8");
-			this.origin = URLEncoder.encode(origin,"utf-8");
-			this.destination = URLEncoder.encode(destination,"utf-8");
-			this.sensor = URLEncoder.encode(String.valueOf(sensor), "utf-8") != null;
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+
+	public DirectionAPIRequest(String contentType, String origin, String destination, boolean sensor) {
+
+		this.contentType = contentType;
+		this.origin = origin;
+		this.destination = destination;
+		this.sensor = sensor;
 	}
-	
-	public String getRequestUrl(){
+
+	public String getRequestUrl() {
 		StringBuilder s = new StringBuilder();
-		s.append(this.basicUrl + this.contentType+"?");
-		s.append("origin="+this.origin);
-		s.append("&destination="+this.destination);
-		s.append("&sensor="+String.valueOf(this.sensor));
-		if(this.mode != null && this.mode != ""){
-			s.append("&mode="+this.mode);
+		s.append(this.basicUrl + this.contentType + "?");
+		s.append("origin=" + converter(this.origin));
+		s.append("&destination=" + converter(this.destination));
+		s.append("&sensor=" + converter(String.valueOf(this.sensor)));
+		if (this.mode != null && this.mode != "") {
+			s.append("&mode=" + converter(this.mode));
 		}
 		return s.toString();
 	}
-	
+
+	public String converter(String in) {
+		String tmp = "";
+		try {
+			tmp = URLEncoder.encode(in, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return tmp;
+	}
+
 	public String getContentType() {
 		return contentType;
 	}
@@ -78,8 +88,23 @@ public class DirectionAPIRequest {
 		return mode;
 	}
 
-	public void setMode(String mode) {
-		this.mode = mode;
+	public void setMode(mode m) {
+		switch(m){
+		case DRIVING:
+			this.mode = "driving";
+			break;
+		case WALKING:
+			this.mode = "walking";
+			break;
+		case BICYCLING:
+			this.mode = "bicycling";
+			break;
+		case TRANSIT:
+			this.mode = "transit";
+			break;
+		default:
+			this.mode = "driving";
+		}
 	}
 
 	public String getWaypoints() {
@@ -137,5 +162,5 @@ public class DirectionAPIRequest {
 	public void setArrival_time(String arrival_time) {
 		this.arrival_time = arrival_time;
 	}
-	
+
 }

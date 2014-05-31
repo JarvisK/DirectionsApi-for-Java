@@ -1,11 +1,11 @@
-package com.beg;
+package com.org;
 
 import java.util.ArrayList;
 
-import com.beg.RoutesData.Legs;
-import com.beg.RoutesData.Routes;
-import com.beg.RoutesData.Steps;
 import com.google.gson.Gson;
+import com.org.RoutesData.Legs;
+import com.org.RoutesData.Routes;
+import com.org.RoutesData.Steps;
 
 public class DirectionsData {
 	private ArrayList<Routes> routes;
