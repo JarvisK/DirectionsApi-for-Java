@@ -1,4 +1,3 @@
-DirectionsApi-for-Java
-======================
+Welcome!
 
-Google directions api for java
+This is a library for java to get the google directions api data.
